@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import Navigation from './components/Navigation'
+import Filter from './components/Filter'
 
 function App() {
 
   return (
-    <section className='relative w-full min-h-screen flex justify-center items-center flex-col'>
+    <div className='dark relative w-full min-h-screen flex justify-center items-center flex-col'>
       <Navigation/>
-      <div className='relative w-full min-h-[calc(100vh-10rem)] flex justify-center items-center flex-col bg-lightBg px-4 sm:px-20'>
-
-      </div>
-    </section>
+      <main className='relative w-full min-h-screen flex justify-start items-center flex-col bg-lightBg dark:bg-darkBg px-4 pt-28 sm:px-20'>
+        <Filter/>
+      </main>
+    </div>
   )
 }
 
