@@ -10,3 +10,20 @@
     box-sizing: border-box;
     font-family: 'Nunito Sans', sans-serif;
 }
+
+.countryInfo {
+    position: relative;
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 0.7em;
+    font-weight: 700;
+    margin-bottom: 0.8em;
+}
+
+.countryInfo span {
+    font-weight: 300;
+    margin-left: 0.5em;
+}
