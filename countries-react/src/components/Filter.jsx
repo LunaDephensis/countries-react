@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-function Filter() {
-    let regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
+function Filter(props) {
     let [isActiveDropDown, setIsActiveDropDown] = useState(false);
     let [isRegionChoosed, setIsRegionChoosed] = useState(false);
     let [actualRegion, setActualRegion] = useState(null);
@@ -10,10 +9,11 @@ function Filter() {
         setIsActiveDropDown(prev => !prev);
     }
 
-    function chooseCountry(index) {
-        setActualRegion(regions[index]);
+    function chooseRegion(index) {
+        setActualRegion(props.regions[index]);
         setIsRegionChoosed(true);
         toggleDropDown();
+        props.onSelectRegion(props.regions[index]);
     }
 
     return (
@@ -35,12 +35,12 @@ function Filter() {
                         <ion-icon name="chevron-down"></ion-icon>
                     </span>
                 </h4>
-                <ul className={`${isActiveDropDown ? "flex" : "hidden"} absolute top-16 left-0 w-full h-auto justify-start items-start flex-col bg-white dark:bg-darkMain rounded-md overflow-hidden shadow-md text-sm`}>
+                <ul className={`${isActiveDropDown ? "flex" : "hidden"} absolute top-16 left-0 w-full h-auto z-40 justify-start items-start flex-col bg-white dark:bg-darkMain rounded-md overflow-hidden shadow-md text-sm`}>
                     {
-                        regions.map((region, i) => {
+                        props.regions.map((region, i) => {
                             return (<li key={i}
                                         className="relative w-full h-8 flex justify-start items-center text-base text-darkText dark:text-white cursor-pointer px-4 duration-1000 ease-out bg-white hover:bg-[rgba(0,0,0,0.1)] dark:bg-darkMain dark:hover:bg-[rgba(255,255,255,0.1)]"
-                                        onClick={() => chooseCountry(i)}
+                                        onClick={() => chooseRegion(i)}
                                     >
                                     {region}
                                     </li>)

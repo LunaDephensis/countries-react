@@ -1,7 +1,7 @@
 function Country(props) {
     return (
         <div className="relative w-60 h-72 flex justify-start items-start flex-col rounded overflow-hidden shadow-md mb-8 sm:mb-0">
-            <div className="relative w-full h-60 flex justify-center items-center">
+            <div className="relative w-full h-72 flex justify-center items-center border-b border-solid border-neutral-100">
                 <img className="absolute top-0 left-0 w-full h-full" src={props.flag.png} alt={props.flag.alt}/>
             </div>
             <div className="relative w-full h-full bg-white dark:bg-darkBg p-4 text-darkText dark:text-white flex justify-start items-center flex-col">
