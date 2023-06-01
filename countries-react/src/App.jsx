@@ -7,6 +7,7 @@ function App() {
   let [allCountries, setAllCountries] = useState([]);
   let [countries, setCountries] = useState([]);
   let [regions, setRegions] = useState([]);
+  let [isActiveDarkMode, setIsActiveDarkMode] = useState(false);
 
   async function getCountries() {
     let res = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,region,capital,population");
@@ -42,9 +43,13 @@ function App() {
     setCountries(regionalCountries);
   }
 
+  function toggleDarkMode() {
+    setIsActiveDarkMode(prev => !prev);
+  }
+
   return (
-    <div className='relative w-full min-h-screen flex justify-center items-center flex-col'>
-      <Navigation/>
+    <div className={`${isActiveDarkMode && "dark"} relative w-full min-h-screen flex justify-center items-center flex-col`}>
+      <Navigation onToggleDarkMode={toggleDarkMode}/>
       <main className='relative w-full min-h-screen flex justify-start items-center flex-col bg-lightBg dark:bg-darkBg px-4 pt-28 sm:px-20'>
         <Filter onSelectRegion={getCountriesByRegion} regions={regions}/>
         <section className='relative w-full h-auto flex justify-center items-center flex-col sm:grid sm:grid-cols-4 sm:gap-10 py-12'>
