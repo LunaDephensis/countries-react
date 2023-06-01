@@ -4,6 +4,7 @@ function Filter(props) {
     let [isActiveDropDown, setIsActiveDropDown] = useState(false);
     let [isRegionChoosed, setIsRegionChoosed] = useState(false);
     let [actualRegion, setActualRegion] = useState(null);
+    let [searchValue, setSearchValue] = useState('');
 
     function toggleDropDown() {
         setIsActiveDropDown(prev => !prev);
@@ -16,6 +17,11 @@ function Filter(props) {
         props.onSelectRegion(props.regions[index]);
     }
 
+    function changeSearchValue(e) {
+        props.onSearch(e.target.value);
+        setSearchValue(e.target.value);
+    }
+
     return (
         <div className="relative w-full flex justify-start sm:justify-between items-start flex-col sm:flex-row">
             <div className="relative flex justify-start items-center w-full sm:max-w-sm h-12 bg-white dark:bg-darkMain px-8 mb-10 sm:mb-0 rounded-md shadow-md">
@@ -23,6 +29,8 @@ function Filter(props) {
                     <ion-icon name="search"></ion-icon>
                 </span>
                 <input type="text" placeholder="Search for a country..."
+                        value={searchValue}
+                        onChange={changeSearchValue}
                         className="relative w-full bg-transparent text-base text-darkText dark:text-white placeholder:text-lightPlaceholder dark:placeholder:text-white placeholder:font-light font-normal outline-none border-none"
                 />
             </div>

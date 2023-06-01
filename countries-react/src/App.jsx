@@ -47,11 +47,23 @@ function App() {
     setIsActiveDarkMode(prev => !prev);
   }
 
+  function searchCountry(value) {
+    if(value.length !== '') {
+      let searchResult = allCountries.filter((country) => {
+        return country.name.toLowerCase().includes(value.toLowerCase());
+      });
+      setCountries(searchResult);
+    }
+    else {
+      setCountries(allCountries);
+    }
+  }
+
   return (
     <div className={`${isActiveDarkMode && "dark"} relative w-full min-h-screen flex justify-center items-center flex-col`}>
       <Navigation onToggleDarkMode={toggleDarkMode}/>
       <main className='relative w-full min-h-screen flex justify-start items-center flex-col bg-lightBg dark:bg-darkBg px-4 pt-28 sm:px-20'>
-        <Filter onSelectRegion={getCountriesByRegion} regions={regions}/>
+        <Filter onSelectRegion={getCountriesByRegion} regions={regions} onSearch={searchCountry}/>
         <section className='relative w-full h-auto flex justify-center items-center flex-col sm:grid sm:grid-cols-4 sm:gap-10 py-12'>
           {
             countries.map((country, i) => {
