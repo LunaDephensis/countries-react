@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import Country from './Country'
 
-function CountryList() {
+function CountryList(props) {
     let [allCountries, setAllCountries] = useState([]);
     let [countries, setCountries] = useState([]);
     let [regions, setRegions] = useState([]);
@@ -59,7 +59,7 @@ function CountryList() {
             <section className='relative w-full h-auto flex justify-center items-center flex-col sm:grid sm:grid-cols-4 sm:gap-10 py-12'>
             {
                 countries.map((country, i) => {
-                return <Country key={i} {...country}/>
+                return <Country key={i} getDetails={props.getDetails} {...country} />
                 })
             }
             </section>

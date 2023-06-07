@@ -5,60 +5,51 @@ import CountryDetails from './components/CountryDetails';
 
 function App() {
   let [isActiveDarkMode, setIsActiveDarkMode] = useState(false);
-  let [isShownDetails, setIsShownDetails] = useState(false);
-
+  let [actualCountryDetails, setActualCountryDetails] = useState(null);
   function toggleDarkMode() {
     setIsActiveDarkMode(prev => !prev);
-  }
-
-  function toggleCountryDetails() {
-    setIsShownDetails(prev => !prev);
   }
 
   async function getCountryDetails(name) {
     let res = await fetch(`https://restcountries.com/v3.1/name/${name}`);
     let countryData = await res.json();
-    return countryData.map((element) => {
-      return {
-        name: element.name.common,
-        nativeName: getNativeNames(element.name.nativeName),
-        population: element.population,
-        region: element.region,
-        subregion: element.subregion,
-        capital: element.capital[0],
-        tld: element.tld[0],
-        currencies: getCurrencies(element.currencies),
-        languages: getLanguages(element.languages),
-        border: getBorders(element.borders)
-      }
+    let element = countryData[0];
+    return {
+      name: element.name.common,
+      nativeName: getNativeNames(element.name.nativeName),
+      population: element.population,
+      region: element.region,
+      subregion: element.subregion,
+      capital: element.capital[0],
+      tld: element.tld[0],
+      currencies: getCurrencies(element.currencies),
+      languages: Object.values(element.languages),
+      border: await getBorders(element.borders),
+      flag: element.flags
+    }
+  }
+  
+  function getNativeNames(natNames) {
+    return Object.values(natNames).map((element) => {
+      return element.common;
     });
   }
 
-  function getNativeNames(natNameObj) {
-    let nativeNames = [];
-    for( let nativeName of natNameObj ) {
-      nativeNames.push(nativeName.common);
-    }
-    return nativeNames;
+  function getCurrencies(curr) {
+    return Object.values(curr).map((element) => {
+      return element.name;
+    });
   }
 
-  function getCurrencies(currObj) {
-    let currencies = [];
-    for ( let curr of currObj ) {
-      currencies.push(curr.name);
-    }
-    return currencies;
-  }
-
-  function getLanguages(langObj) {
-    let languages = [];
-    for ( let lang of langObj ) {
-      languages.push(lang);
-    }
-    return languages;
+  async function chooseActualCountry(name) {
+    let country = await getCountryDetails(name);
+    setActualCountryDetails(country);
   }
 
    async function getBorders(borderCodes) {
+    if(!borderCodes) {
+      return ["This country has no borders."];
+    }
     let res = await fetch(`https://restcountries.com/v3.1/alpha?codes=${borderCodes.join()}&fields=name`);
     let bordersData = await res.json();
     return bordersData.map((border) => {
@@ -66,11 +57,14 @@ function App() {
     });
   }
 
+  function backToList() {
+    setActualCountryDetails(null);
+  }
+
   return (
     <div className={`${isActiveDarkMode && "dark"} relative w-full min-h-screen flex justify-center items-center flex-col`}>
       <Navigation onToggleDarkMode={toggleDarkMode}/>
-      {isShownDetails ? <CountryDetails onToggleDetails={toggleCountryDetails}/> : <CountryList onToggleDetails={toggleCountryDetails}/>}
-      <CountryList/>
+      {actualCountryDetails !== null ? <CountryDetails {...actualCountryDetails} onBackToList={backToList}/> : <CountryList getDetails={chooseActualCountry}/>}
     </div>
   )
 }
