@@ -17,25 +17,52 @@ function App() {
     return {
       name: element.name.common,
       nativeName: getNativeNames(element.name.nativeName),
-      population: element.population,
-      region: element.region,
-      subregion: element.subregion,
-      capital: element.capital[0],
-      tld: element.tld[0],
+      population: element.population || "-",
+      region: element.region || "-",
+      subregion: element.subregion || "-",
+      capital: getCapital(element),
+      tld: getTld(element),
       currencies: getCurrencies(element.currencies),
-      languages: Object.values(element.languages),
+      languages: getLanguages(element),
       border: await getBorders(element.borders),
       flag: element.flags
     }
   }
+
+  function getCapital(element) {
+    if(!element.capital) {
+      return "-";
+    }
+    return element.capital[0];
+  }
+
+  function getTld(element) {
+    if(!element.tld) {
+      return "-";
+    }
+    return element.tld[0];
+  }
+
+  function getLanguages(element) {
+    if(!element.languages) {
+      return ["-"];
+    }
+    return Object.values(element.languages);
+  }
   
   function getNativeNames(natNames) {
+    if(!natNames) {
+      return ["-"];
+    }
     return Object.values(natNames).map((element) => {
       return element.common;
     });
   }
 
   function getCurrencies(curr) {
+    if(!curr) {
+      return ["-"];
+    }
     return Object.values(curr).map((element) => {
       return element.name;
     });
@@ -48,7 +75,7 @@ function App() {
 
    async function getBorders(borderCodes) {
     if(!borderCodes) {
-      return ["This country has no borders."];
+      return ["This country has no border countries."];
     }
     let res = await fetch(`https://restcountries.com/v3.1/alpha?codes=${borderCodes.join()}&fields=name`);
     let bordersData = await res.json();
@@ -64,7 +91,7 @@ function App() {
   return (
     <div className={`${isActiveDarkMode && "dark"} relative w-full min-h-screen flex justify-center items-center flex-col`}>
       <Navigation onToggleDarkMode={toggleDarkMode}/>
-      {actualCountryDetails !== null ? <CountryDetails {...actualCountryDetails} onBackToList={backToList}/> : <CountryList getDetails={chooseActualCountry}/>}
+      {actualCountryDetails !== null ? <CountryDetails {...actualCountryDetails} onBackToList={backToList} getDetails={chooseActualCountry}/> : <CountryList getDetails={chooseActualCountry}/>}
     </div>
   )
 }
