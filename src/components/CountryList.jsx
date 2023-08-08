@@ -1,26 +1,13 @@
 import { useState, useEffect } from 'react'
 import Filter from './Filter'
 import Country from './Country'
+import { getCountries } from '../api/countries';
 
 function CountryList(props) {
     let [allCountries, setAllCountries] = useState([]);
     let [countries, setCountries] = useState([]);
     let [regions, setRegions] = useState([]);
 
-    async function getCountries() {
-        let res = await fetch("https://restcountries.com/v3.1/all?fields=name,flags,region,capital,population");
-        let countriesData = await res.json();
-        return countriesData.map((element) => {
-          return {
-            name: element.name.common,
-            flag: element.flags,
-            population: element.population,
-            region: element.region,
-            capital: element.capital[0]
-          }
-        });
-      }
-    
       useEffect(() => {
         getCountries().then((data) => {
           setAllCountries(data);

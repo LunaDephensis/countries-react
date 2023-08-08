@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 function Filter(props) {
     let [isActiveDropDown, setIsActiveDropDown] = useState(false);
-    let [isRegionChoosed, setIsRegionChoosed] = useState(false);
     let [actualRegion, setActualRegion] = useState(null);
     let [searchValue, setSearchValue] = useState('');
 
@@ -10,16 +9,16 @@ function Filter(props) {
         setIsActiveDropDown(prev => !prev);
     }
 
-    function chooseRegion(index) {
-        setActualRegion(props.regions[index]);
-        setIsRegionChoosed(true);
+    function chooseRegion(region) {
+        setActualRegion(region);
         toggleDropDown();
-        props.onSelectRegion(props.regions[index]);
+        props.onSelectRegion(region);
     }
 
     function changeSearchValue(e) {
-        props.onSearch(e.target.value);
-        setSearchValue(e.target.value);
+        const val = e.target.value;
+        props.onSearch(val);
+        setSearchValue(val);
     }
 
     return (
@@ -38,7 +37,7 @@ function Filter(props) {
                 <h4 className="w-full text-sm font-normal text-darkText dark:text-white flex justify-between items-center px-4 "
                     onClick={toggleDropDown}
                 >
-                    {isRegionChoosed ? actualRegion : "Filter by Region"}
+                    {actualRegion !== null ? actualRegion : "Filter by Region"}
                     <span className="relative flex justify-center items-center text-sm text-darkText dark:text-white">
                         <ion-icon name="chevron-down"></ion-icon>
                     </span>
@@ -48,7 +47,7 @@ function Filter(props) {
                         props.regions.map((region, i) => {
                             return (<li key={i}
                                         className="relative w-full h-8 flex justify-start items-center text-base text-darkText dark:text-white cursor-pointer px-4 duration-1000 ease-out bg-white hover:bg-[rgba(0,0,0,0.1)] dark:bg-darkMain dark:hover:bg-[rgba(255,255,255,0.1)]"
-                                        onClick={() => chooseRegion(i)}
+                                        onClick={() => chooseRegion(region)}
                                     >
                                     {region}
                                     </li>)
